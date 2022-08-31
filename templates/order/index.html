@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block title %}订单管理{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>订单数据列表</h4>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-right">
+            <a class="btn btn-primary" href="/order/create/">添加</a>
+        </div>
+    </div>
+    <div>
+        <table class="table table-hover">
+            <tr>
+                <th>商品</th>
+                <th>客户</th>
+                <th>订购数量</th>
+                <th>销售单价(元)</th>
+                <th>总价(元)</th>
+                <th>销售时间</th>
+                <th width="140">操作</th>
+            </tr>
+            {% for item in data_list %}
+            <tr>
+                <td>
+                    <a href="/order/detail/{{item.id}}">
+                        <img src="/{{ item.stock.product.image }}" width="60">
+                        {{ item.stock }}
+                    </a>
+                </td>
+                <td>{{ item.customer }} </td>
+                <td>{{ item.quantity  }} {{ item.quantity_unit|default_if_none:""  }}</td>
+
+                <td>{{ item.price }} </td>
+                <td>{{ item.total_price }} </td>
+                <td>{{ item.time_on_order}} </td>
+                <td>
+                    <a class="btn btn-success" href="/order/update/{{item.id}}">修改</a>
+                    <a class="btn btn-danger" href="/order/delete/{{item.id}}">删除</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </table>
+        {% include 'pagination.html' %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block style %}
+{# 表格的单元格垂直居中的样式 #}
+<style>
+   table td {
+    vertical-align: middle !important;
+    }
+</style>
+{% endblock %}

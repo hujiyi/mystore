@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block title %}供应商管理{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-danger">查看供应商详细信息</h3>
+            <br>
+            <span class="text-danger">{{ error_msg }}</span>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>名称</label>
+                    {{ data.name }}
+                </div>
+                <div class="form-group">
+                    <label>电话</label>
+                    {{ data.phone }}
+                </div>
+                <div class="form-group">
+                    <label>城市</label>
+                    {{ data.city }}
+                </div>
+                <div class="form-group">
+                    <label>地址</label>
+                    {{ data.address }}
+                </div>
+                <div class="form-group">
+                    <label>备注</label>
+                    {{ data.desc }}
+                </div>
+                <div class="form-group">
+                    <a class="btn btn-primary" href="/supplier/">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block style %}{% endblock %}

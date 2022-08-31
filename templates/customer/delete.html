@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% block title %}客户管理{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
+                <h3 class="text-danger">确认删除客户</h3>
+                <br>
+                <span class="text-danger">{{ error_msg }}</span>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>名称</label>
+                        {{ data.name }}
+                    </div>
+                    <div class="form-group">
+                        <label>电话</label>
+                        {{ data.phone }}
+                    </div>
+                    <div class="form-group">
+                        <label>地址</label>
+                        {{ data.address }}
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-primary" href="/customer/">返回</a>
+                        <button type="submit" class="btn btn-danger">确定删除</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block style %}{% endblock %}

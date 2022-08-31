@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% block title %}商品管理{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-danger">查看商品详细信息</h3>
+            <br>
+            <span class="text-danger">{{ error_msg }}</span>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>名称</label>
+                    {{ data.name }}
+                </div>
+                <div class="form-group">
+                    <label>图片</label>
+                    {% if data.image %}
+                    <img src="/{{ data.image }}" width="120">
+                    <br>
+                    {% endif %}
+                    {{ data.image }}
+                </div>
+                <div class="form-group">
+                    <label>描述</label>
+                    {{ data.desc }}
+                </div>
+                <div class="form-group">
+                    <a class="btn btn-primary" href="/product/">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block style %}{% endblock %}

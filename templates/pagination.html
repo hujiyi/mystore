@@ -1,0 +1,23 @@
+{% if data_list.count %}
+<ul class="pagination">
+    {% if current_page.has_previous %}
+        <li><a href="?page={{ current_page.previous_page_number }}">前一页</a></li>
+    {% endif %}
+    {% for item in paginator.page_range %}
+        {% if item == current_page.number %}
+            {# 当前页添加  active 样式 #}
+            <li class="active">
+                <a href="?page={{ item }}">{{ item }}</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="?page={{ item }}">{{ item }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    {% if current_page.has_next %}
+        <li><a href="?page={{ current_page.next_page_number }}">后一页</a></li>
+    {% endif %}
+</ul>
+
+{% endif %}

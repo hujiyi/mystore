@@ -1,0 +1,22 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">商品销售管理系统</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/">首页</a></li>
+            <li><a href="/customer/">客户管理</a></li>
+            <li><a href="/supplier/">供应商管理</a></li>
+            <li><a href="/product/">商品管理</a></li>
+            <li><a href="/stock/">库存管理</a></li>
+            <li><a href="/order/">订单管理</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="#">当前用户: {{ request.user.username }}</a></li>
+            <li><a href="/logout/">注销</a></li>
+            {% else %}
+            <li><a href="/signup/">注册新用户</a></li>
+            <li><a href="/login/">用户登录</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

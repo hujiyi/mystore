@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block title %}商品管理{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>商品信息</h4>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-right">
+            <a class="btn btn-primary" href="/product/create/">添加</a>
+        </div>
+    </div>
+    <div>
+        <table class="table table-hover">
+            <tr>
+                <th>名称</th>
+                <th>图片</th>
+                <th>描述</th>
+                <th width="140">操作</th>
+            </tr>
+            {% for item in data_list %}
+            <tr valign="middle">
+                <td>
+                    <a href="/product/detail/{{item.id}}">{{ item.name }}</a>
+                </td>
+                <td>
+                    <img src="/{{ item.image }}" width="60">
+                    {# {{ item.image }} #}
+                </td>
+                <td>{{ item.desc|default_if_none:""  }}</td>
+                <td>
+                    <a class="btn btn-success" href="/product/update/{{item.id}}">修改</a>
+                    <a class="btn btn-danger" href="/product/delete/{{item.id}}">删除</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </table>
+        {% include 'pagination.html' %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block style %}
+{# 表格的单元格垂直居中的样式 #}
+<style>
+   table td {
+    vertical-align: middle !important;
+    }
+</style>
+{% endblock %}

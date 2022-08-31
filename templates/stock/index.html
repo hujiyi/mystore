@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% block title %}库存管理{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>库存数据列表</h4>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-right">
+            <a class="btn btn-primary" href="/stock/create/">添加</a>
+        </div>
+    </div>
+    <div>
+        <table class="table table-hover">
+            <tr>
+                <th>商品</th>
+                <th>供应商</th>
+                <th>入库数量</th>
+                <th>入库单价(元)</th>
+                <th>已售数量</th>
+                <th>入库时间</th>
+                <th width="140">操作</th>
+            </tr>
+            {% for item in data_list %}
+            <tr>
+                <td>
+                    <a href="/stock/detail/{{item.id}}">
+                        <img src="/{{ item.product.image }}" width="60">
+                        {{ item.product }}
+                    </a>
+                </td>
+                <td>{{ item.supplier|default_if_none:""  }} </td>
+                <td>{{ item.unit_in_stock|default_if_none:""  }} {{ item.quantity_unit|default_if_none:""  }}</td>
+                <td>{{ item.price_in_stock|default_if_none:""  }} </td>
+                <td>{{ item.unit_on_order|default_if_none:""  }} {{ item.quantity_unit|default_if_none:""  }}</td>
+                <td>{{ item.time_in_stock|default_if_none:""  }} </td>
+                <td>
+                    <a class="btn btn-success" href="/stock/update/{{item.id}}">修改</a>
+                    <a class="btn btn-danger" href="/stock/delete/{{item.id}}">删除</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </table>
+        {% include 'pagination.html' %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block style %}
+{# 表格的单元格垂直居中的样式 #}
+<style>
+   table td {
+    vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
