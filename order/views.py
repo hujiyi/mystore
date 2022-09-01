@@ -122,14 +122,16 @@ def report(request):
         "customer__name", "total", "month")
     # 使用 HttpResponse 在浏览器检查汇总的结果
     # return HttpResponse(data)
-
-    # Bar为柱状图
-    bar = Bar(init_opts=opts.InitOpts(width='800px', height='400px'))
-    # x轴显示信息
-    bar.add_xaxis([f"{i['month']}月 - {i['customer__name']}" for i in data_customer])
-    # 添加一个Y轴信息
-    bar.add_yaxis('消费总金额: ', [i['total'] for i in data_customer])
-    bar.render('templates/bar.html')  # 生成图表时html文件的路径从 templates 开始
+    if data_customer:
+        # Bar为柱状图
+        bar = Bar(init_opts=opts.InitOpts(width='800px', height='400px'))
+        # x轴显示信息
+        bar.add_xaxis([f"{i['month']}月 - {i['customer__name']}" for i in data_customer])
+        # 添加一个Y轴信息
+        bar.add_yaxis('消费总金额: ', [i['total'] for i in data_customer])
+        # 生成图表时html文件的路径从 templates 开始,
+        # 提前建好渲染的空 html 文件, 否则第一次启动并且没有数据时会出现异常
+        bar.render('templates/render/bar_customer.html')
 
     data_products = Order.objects.values("stock__product__name").annotate(
         # .annotate() 汇总的项目
@@ -138,53 +140,56 @@ def report(request):
         "stock__product__name", "total", "month")
     # return HttpResponse(data_products)
 
-    # Pie 用于生成饼图
-    pie_product = Pie(init_opts=opts.InitOpts(width='400px', height='250px'))
-    # 饼图的颜色列表
-    pie_product.set_colors(["blue", "green", "yellow", "red", "pink", "orange", "purple"])
-    # 设置标题
-    pie_product.set_global_opts(
-        title_opts=opts.TitleOpts(title="每月商品销售额比例"),
-        # 设置图例位置
-        legend_opts=opts.LegendOpts(type_="scroll", pos_left="70%", orient="vertical"), )
-    # 添加饼图数据
-    pie_product.add(
-        "",
-        [list(z) for z in zip(
-            [f"{i['month']}月 - {i['stock__product__name']}" for i in data_products],  # 文字
-            [i['total'] for i in data_products])],  # 数值
-        radius=["30%", "75%"],  # 可选项
-        center=["35%", "50%"],  # 可选项
-        rosetype="radius",  # 可选项
-    )
-    # 生成到第二个文件
-    pie_product.render('templates/pie_product.html')  # 生成图表时html文件的路径从 templates 开始
+    if data_products:
+        # Pie 用于生成饼图
+        pie_product = Pie(init_opts=opts.InitOpts(width='400px', height='250px'))
+        # 饼图的颜色列表
+        pie_product.set_colors(["blue", "green", "yellow", "red", "pink", "orange", "purple"])
+        # 设置标题
+        pie_product.set_global_opts(
+            title_opts=opts.TitleOpts(title="每月商品销售额比例"),
+            # 设置图例位置
+            legend_opts=opts.LegendOpts(type_="scroll", pos_left="70%", orient="vertical"), )
+        # 添加饼图数据
+        pie_product.add(
+            "",
+            [list(z) for z in zip(
+                [f"{i['month']}月 - {i['stock__product__name']}" for i in data_products],  # 文字
+                [i['total'] for i in data_products])],  # 数值
+            radius=["30%", "75%"],  # 可选项
+            center=["35%", "50%"],  # 可选项
+            rosetype="radius",  # 可选项
+        )
+        # 生成到第二个文件,  生成图表时html文件的路径从 templates 开始, 提前建好渲染的空 html 文件
+        pie_product.render('templates/render/pie_product.html')
 
     data_supplier = Order.objects.values("stock__supplier__name").annotate(
         # .annotate() 汇总的项目
         # month=ExtractMonth('time_on_order'),
         total=Sum("total_price")).values(
         "stock__supplier__name", "total", )
+    # return  HttpResponse(data_supplier)
 
-    pie_supplier = Pie(init_opts=opts.InitOpts(width='400px', height='250px'))
-    pie_supplier.set_colors(["blue", "green", "yellow", "red", "pink", "orange", "purple"])
-    # 设置标题
-    pie_supplier.set_global_opts(
-        title_opts=opts.TitleOpts(title="每月按供应商销售金额比例"),
-        # 设置图例位置
-        legend_opts=opts.LegendOpts(type_="scroll", pos_left="70%", orient="vertical"), )
-    # # pie_product.set_series_opts()
-    pie_supplier.add(
-        "",
-        [list(z) for z in zip(
-            [i['stock__supplier__name'] for i in data_supplier],
-            [i['total'] for i in data_supplier])],
-        radius=["30%", "75%"],
-        center=["35%", "50%"],
-        rosetype="radius",
-    )
-    # 生成到第三个文件
-    pie_supplier.render('templates/pie_supplier.html')
+    if data_supplier:
+        pie_supplier = Pie(init_opts=opts.InitOpts(width='400px', height='250px'))
+        pie_supplier.set_colors(["blue", "green", "yellow", "red", "pink", "orange", "purple"])
+        # 设置标题
+        pie_supplier.set_global_opts(
+            title_opts=opts.TitleOpts(title="每月按供应商销售金额比例"),
+            # 设置图例位置
+            legend_opts=opts.LegendOpts(type_="scroll", pos_left="70%", orient="vertical"), )
+        # # pie_product.set_series_opts()
+        pie_supplier.add(
+            "",
+            [list(z) for z in zip(
+                [i['stock__supplier__name'] for i in data_supplier],
+                [i['total'] for i in data_supplier])],
+            radius=["30%", "75%"],
+            center=["35%", "50%"],
+            rosetype="radius",
+        )
+        # 生成到第三个文件, 生成图表时html文件的路径从 templates 开始, 提前建好渲染的空 html 文件
+        pie_supplier.render('templates/render/pie_supplier.html')
 
     # 在 'order/report.html' 引用 以上生成的三个文件
     return render(request, 'order/report.html', locals())
