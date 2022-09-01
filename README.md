@@ -1,4 +1,5 @@
-# mystote
+# mystore
+
 a Django store app
 
 使用办法：
@@ -19,4 +20,6 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
+
+详细教程见 https://hujiyi.github.io
 
